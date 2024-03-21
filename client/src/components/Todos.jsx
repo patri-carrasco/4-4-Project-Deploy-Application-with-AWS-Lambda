@@ -77,7 +77,8 @@ export function Todos() {
   async function onTodoDelete(todoId) {
     try {
       const accessToken = await getAccessTokenSilently({
-        audience: `https://test-endpoint.auth0.com/api/v2/`,
+        //audience: `https://test-endpoint.auth0.com/api/v2/`,
+        audience: `https://dev-ls8xao57gpsnxuq4.us.auth0.com/api/v2/`, 
         scope: 'delete:todo'
       })
       await deleteTodo(accessToken, todoId)
@@ -91,7 +92,8 @@ export function Todos() {
     try {
       const todo = todos[pos]
       const accessToken = await getAccessTokenSilently({
-        audience: `https://test-endpoint.auth0.com/api/v2/`,
+        //audience: `https://test-endpoint.auth0.com/api/v2/`,
+        audience: `https://dev-ls8xao57gpsnxuq4.us.auth0.com/api/v2/`, 
         scope: 'write:todo'
       })
       await patchTodo(accessToken, todo.todoId, {
@@ -128,7 +130,8 @@ export function Todos() {
     async function foo() {
       try {
         const accessToken = await getAccessTokenSilently({
-          audience: `https://test-endpoint.auth0.com/api/v2/`,
+          //audience: `https://test-endpoint.auth0.com/api/v2/`,
+          audience: `https://dev-ls8xao57gpsnxuq4.us.auth0.com/api/v2/`, 
           scope: 'read:todos'
         })
         console.log('Access token: ' + accessToken)
