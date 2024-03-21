@@ -4,7 +4,9 @@ import { createLogger } from '../../utils/logger.mjs'
 
 const logger = createLogger('auth')
 
-const jwksUrl = 'https://test-endpoint.auth0.com/.well-known/jwks.json'
+
+// To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
+const jwksUrl = 'https://dev-ls8xao57gpsnxuq4.us.auth0.com/.well-known/jwks.json' 
 
 export async function handler(event) {
   try {
@@ -47,7 +49,8 @@ async function verifyToken(authHeader) {
   const jwt = jsonwebtoken.decode(token, { complete: true })
 
   // TODO: Implement token verification
-  return undefined;
+
+  return verify(token, jwksUrl, {algorithms:['RS256']});
 }
 
 function getToken(authHeader) {
