@@ -11,9 +11,12 @@ const jwksUrl = 'https://dev-ls8xao57gpsnxuq4.us.auth0.com/.well-known/jwks.json
 
 
 export async function handler(event) {
+  let jwtToken;
   try {
-    const jwtToken = await verifyToken(event.authorizationToken)
+    jwtToken = await verifyToken(event.authorizationToken)
     logger.info("User was authorized", jwtToken);
+
+    console.log(jwtToken)
 
     return {
       principalId: jwtToken.sub,
@@ -51,17 +54,28 @@ async function verifyToken(authHeader) {
   const token = getToken(authHeader);
   const jwt = jsonwebtoken.decode(token, { complete: true });
 
-  console.log('verifyToken', token)
-  console.log("jwt", jwt);
 
-  // Implement token verification
-   
-  console.log("chorizo", jsonwebtoken.verify(token, jwksUrl, { algorithms: ["RS256"] }));
+  console.log("kid del token JWT:", jwt.header.kid);
 
-  return jsonwebtoken.verify(token, jwksUrl, { algorithms: ["RS256"] });
+  const { data: jwks } = await Axios.get(jwksUrl);
+  const { keys } = jwks;
+
+  console.log("Keys from JWKS:", keys);
+
+  const key = keys.find((key) => key.kid === jwt.header.kid);
+
+  console.log("Identificadores de clave en el JWKS:",keys.map((key) => key.kid));
+
+  if (!key) {
+    throw new Error("Unable to find matching key in JWKS");
+  }
+
+  const publicKey = `-----BEGIN CERTIFICATE-----\n${key.x5c[0]}\n-----END CERTIFICATE-----`;
+
+  return jsonwebtoken.verify(token, publicKey, { algorithms: ["RS256"] });
 }
 
-function getToken(authHeader) {
+export function getToken(authHeader) {
   if (!authHeader) throw new Error('No authentication header')
 
   if (!authHeader.toLowerCase().startsWith('bearer '))
