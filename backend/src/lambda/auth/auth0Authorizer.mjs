@@ -1,16 +1,19 @@
 import Axios from 'axios'
 import jsonwebtoken from 'jsonwebtoken'
+
 import { createLogger } from '../../utils/logger.mjs'
 
 const logger = createLogger('auth')
-
+console.log("logger", logger)
 
 // To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
 const jwksUrl = 'https://dev-ls8xao57gpsnxuq4.us.auth0.com/.well-known/jwks.json' 
 
+
 export async function handler(event) {
   try {
     const jwtToken = await verifyToken(event.authorizationToken)
+    logger.info("User was authorized", jwtToken);
 
     return {
       principalId: jwtToken.sub,
@@ -45,12 +48,17 @@ export async function handler(event) {
 }
 
 async function verifyToken(authHeader) {
-  const token = getToken(authHeader)
-  const jwt = jsonwebtoken.decode(token, { complete: true })
+  const token = getToken(authHeader);
+  const jwt = jsonwebtoken.decode(token, { complete: true });
 
-  // TODO: Implement token verification
+  console.log('verifyToken', token)
+  console.log("jwt", jwt);
 
-  return verify(token, jwksUrl, {algorithms:['RS256']});
+  // Implement token verification
+   
+  console.log("chorizo", jsonwebtoken.verify(token, jwksUrl, { algorithms: ["RS256"] }));
+
+  return jsonwebtoken.verify(token, jwksUrl, { algorithms: ["RS256"] });
 }
 
 function getToken(authHeader) {
