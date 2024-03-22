@@ -128,6 +128,7 @@ export function Todos() {
 
   useEffect(() => {
     async function foo() {
+      console.log("entra")
       try {
         const accessToken = await getAccessTokenSilently({
           //audience: `https://test-endpoint.auth0.com/api/v2/`,
@@ -135,7 +136,10 @@ export function Todos() {
           scope: 'read:todos'
         })
         console.log('Access token: ' + accessToken)
+        console.log("imprime algo", accessToken)
+
         const todos = await getTodos(accessToken)
+        console.log("que pasassssssss")
         setTodos(todos)
         setLoadingTodos(false)
       } catch (e) {
