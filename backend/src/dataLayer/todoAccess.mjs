@@ -8,7 +8,6 @@ export class TodoAccess {
     todoTable = process.env.TODOS_TABLE,
     userIdIndex = process.env.TODOS_CREATED_AT_INDEX
   ) {
-
     console.log("TodoTable:", todoTable);
     console.log("UserIdIndex:", userIdIndex);
     this.documentClient = documentClient;
@@ -17,20 +16,23 @@ export class TodoAccess {
     this.dynamoDbClient = DynamoDBDocument.from(this.documentClient);
   }
 
-
   async getTodosForUser(userId) {
     console.log("Getting all todos");
-    console.log("tabla",this.todoTable)
-    const result = await this.dynamoDbClient
-      .query({
-        TableName: this.todoTable,
-        IndexName: this.userIdIndex,
-        KeyConditionExpression: "userId = :userId",
-        ExpressionAttributeValues: {
-          ":userId": userId,
-        },
-      });
-    console.log("Returning todos for user: " +userId +", and items: " +JSON.stringify({ result }));
+    console.log("tabla", this.todoTable);
+    const result = await this.dynamoDbClient.query({
+      TableName: this.todoTable,
+      IndexName: this.userIdIndex,
+      KeyConditionExpression: "userId = :userId",
+      ExpressionAttributeValues: {
+        ":userId": userId,
+      },
+    });
+    console.log(
+      "Returning todos for user: " +
+        userId +
+        ", and items: " +
+        JSON.stringify({ result })
+    );
     return result.Items;
   }
 
@@ -44,4 +46,27 @@ export class TodoAccess {
 
     return todoItem;
   }
+
+  async deleteTodo(todoId) {
+    await this.docClient.delete({
+      TableName: this.todoTable,
+      Key: {
+        todoId: todoId,
+      },
+    });
+
+    return "Todo deleted";
+  }
+
+  async getTodo(todoId) {
+    return await this.docClient
+      .query({
+        TableName: this.todoTable,
+        KeyConditionExpression: "todoId = :todoId",
+        ExpressionAttributeValues: {
+          ":todoId": todoId,
+        },
+      });
+  }
 }
+

@@ -39,3 +39,11 @@ export async function createTodo(createTodoRequest, jwtToken) {
   
 
 }
+
+export async function deleteTodo(todoId) {
+  return await todoAccess.deleteTodo(todoId);
+}
+
+export async function todoExists(todoId) {
+  return await todoAccess.getTodo(todoId);
+}
