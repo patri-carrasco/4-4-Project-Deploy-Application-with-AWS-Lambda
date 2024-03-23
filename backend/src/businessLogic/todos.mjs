@@ -2,6 +2,7 @@ import * as uuid from "uuid";
 import { TodoAccess } from "../dataLayer/todoAccess.mjs";
 import { createLogger } from "../utils/logger.mjs"
 import { parseUserId } from "../auth/utils.mjs";
+import { getTodoAttachmentUrl } from "../fileStorage/attachmentUtils.mjs";
 
 const todoAccess = new TodoAccess()
 const logger = createLogger('auth')
@@ -14,9 +15,9 @@ export async function getTodosUser(jwtToken) {
 
   const todos = await todoAccess.getTodosForUser(userId);
 
-  // for (const todo of todos) {
-  //   todo.attachmentUrl = await getTodoAttachmentUrl(todo.todoId);
-  // }
+  for (const todo of todos) {
+    todo.attachmentUrl = await getTodoAttachmentUrl(todo.todoId);
+  }
   return todos;
 }
 
@@ -46,4 +47,7 @@ export async function deleteTodo(todoId) {
 
 export async function todoExists(todoId) {
   return await todoAccess.getTodo(todoId);
+}
+export async function updateTodo(todoId, updateTodoRequest) {
+  return await todoAccess.updateTodo(todoId, updateTodoRequest);
 }

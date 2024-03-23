@@ -61,14 +61,33 @@ export class TodoAccess {
 
   async getTodo(todoId) {
     console.log(`Getting a  todo  ${todoId}`);
-    return await this.dynamoDbClient
-      .query({
+    return await this.dynamoDbClient.query({
+      TableName: this.todoTable,
+      KeyConditionExpression: "todoId = :todoId",
+      ExpressionAttributeValues: {
+        ":todoId": todoId,
+      },
+    });
+  }
+  async updateTodo(todoId, updateTodoRequest) {
+    await this.dynamoDbClient
+      .update({
         TableName: this.todoTable,
-        KeyConditionExpression: "todoId = :todoId",
+        Key: {
+          todoId: todoId,
+        },
+        UpdateExpression: "set #namefield = :n, duDate = :d, done = :done",
         ExpressionAttributeValues: {
-          ":todoId": todoId,
+          ":n": updateTodoRequest.name,
+          "d:": updateTodoRequest.dueDate,
+          done: updateTodoRequest.done,
+        },
+        ExpressionAttributeNames: {
+          "#namefield": "name",
         },
       });
+
+    return updateTodoRequest;
   }
 }
 
