@@ -48,7 +48,8 @@ export class TodoAccess {
   }
 
   async deleteTodo(todoId) {
-    await this.docClient.delete({
+    console.log(`Deleting a  todo  ${todoId}`);
+    await this.dynamoDbClient.delete({
       TableName: this.todoTable,
       Key: {
         todoId: todoId,
@@ -59,7 +60,8 @@ export class TodoAccess {
   }
 
   async getTodo(todoId) {
-    return await this.docClient
+    console.log(`Getting a  todo  ${todoId}`);
+    return await this.dynamoDbClient
       .query({
         TableName: this.todoTable,
         KeyConditionExpression: "todoId = :todoId",
