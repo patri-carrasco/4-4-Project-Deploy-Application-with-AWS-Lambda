@@ -1,5 +1,5 @@
 
-import { createTodo } from '../../businessLogic/todo.mjs'
+import { createTodo } from '../../businessLogic/todos.mjs'
 import {getToken} from '../auth/auth0Authorizer.mjs'
 
 export async function handler(event) {

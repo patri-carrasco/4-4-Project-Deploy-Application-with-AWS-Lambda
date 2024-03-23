@@ -1,11 +1,12 @@
 import "source-map-support/register.js";
-import { getTodosForUser } from "../../businessLogic/todos.mjs";
+import { getTodosUser } from "../../businessLogic/todos.mjs";
 import { getToken } from "../auth/auth0Authorizer.mjs";
 
 export async function handler(event) {
     console.log('Processing event: ' + event);
     const jwtToken = getToken(event.headers.Authorization);
-    const todos = await getTodosForUser(jwtToken);
+    const todos = await getTodosUser(jwtToken);
+    console.log("yoken", jwtToken)
     return {
     statusCode: 200,
     headers: {

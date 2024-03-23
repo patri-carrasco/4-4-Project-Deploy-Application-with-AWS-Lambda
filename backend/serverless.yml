@@ -2,6 +2,8 @@ service: serverless-todo-app
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-webpack
+  #- serverless-reqvalidator-plugin
 
 frameworkVersion: '3'
 

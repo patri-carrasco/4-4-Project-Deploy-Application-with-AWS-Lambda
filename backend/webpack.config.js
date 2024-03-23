@@ -8,10 +8,10 @@ module.exports = {
   // externals: [nodeExternals()],
   devtool: "source-map",
   resolve: {
-    extensions: [".js", ".mjs", ".json"],
+    extensions: [".js", ".mjs", ".json",".jsx"],
   },
   output: {
-    libraryTarget: "commonjs",
+    libraryTarget: "commonjs2",
     path: path.resolve(__dirname, ".webpack"),
     filename: "[name].js",
   },
@@ -24,7 +24,7 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: ["@babel/preset-env"],
           },
         },
       },
